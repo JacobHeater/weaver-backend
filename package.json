@@ -1,5 +1,10 @@
 {
   "name": "weaver-backend",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/JacobHeater/weaver-backend.git"
+  },
   "version": "1.0.0",
   "description": "Weaver backend component",
   "main": "index.js",
