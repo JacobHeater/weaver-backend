@@ -1,7 +1,7 @@
 import { Socket } from "socket.io";
-import { LogoutRequest } from "./logout-request";
-import { LogoutResponse } from "./logout-response";
-import { StatusCodes } from "../../enums/status-codes";
+import { LogoutRequest } from "../../../../weaver-common/src/operations/logout/logout-request";
+import { LogoutResponse } from "../../../../weaver-common/src/operations/logout/logout-response";
+import { StatusCodes } from "../../../../weaver-common/src/enums/status-codes";
 import { ClientManager } from "../../clients/client-manager";
 
 export const events = {

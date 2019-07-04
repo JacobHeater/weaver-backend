@@ -1,9 +1,11 @@
 import { Socket } from "socket.io";
-import { RegistrationRequest } from "./registration-request";
-import { RegistrationResponse } from "./registration-response";
-import { StatusCodes } from "../../enums/status-codes";
+import { RegistrationRequest } from "../../../../weaver-common/src/operations/register/register-request";
+import { RegistrationResponse } from "../../../../weaver-common/src/operations/register/register-response";
+import { StatusCodes } from "../../../../weaver-common/src/enums/status-codes";
 import { ClientSocketPair } from "../../clients/client-socket-pair";
 import { ClientManager } from "../../clients/client-manager";
+import { Factory} from '../../../../weaver-common/src/helpers/factory';
+import { Client } from '../../../../weaver-common/src/common/client';
 
 export const events = {
   register: 'register',
@@ -13,6 +15,8 @@ export const events = {
 export function register(socket: Socket) {
   socket.on(events.register, (request: RegistrationRequest) => {
     const response = new RegistrationResponse();
+
+    request.data = Factory.from(Client, request.data);
     
     if (!request || !request.data || !request.data.isValid()) {
       response.status = StatusCodes.Failure;

@@ -1,5 +1,5 @@
 import { TestSocket } from '../mocks/test-sccket';
-import { Client } from '../../src/clients/client';
+import { Client } from '../../../weaver-common/src/common/client';
 import { ClientSocketPair } from '../../src/clients/client-socket-pair';
 import { ClientManager } from '../../src/clients/client-manager';
 import uuid from 'uuid/v4';

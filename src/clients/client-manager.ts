@@ -1,5 +1,7 @@
 import { ClientSocketPair } from "./client-socket-pair";
-import { Client } from "./client";
+import { Client } from "../../../weaver-common/src/common/client";
+import { objectValues } from '../../../weaver-common/src/helpers/object-helpers';
+import markdownTable from 'markdown-table';
 
 export class ClientManager {
   private constructor() { }
@@ -46,5 +48,24 @@ export class ClientManager {
     }
 
     return this._clientTable[clientId];
+  }
+
+  /**
+   * Returns the client table to a JSON string.
+   */
+  public clientsToTable(): string {
+    const table: any[] = [];
+    const cols = Object.keys(new Client());
+
+    table.push(cols);
+
+    for (let id in this._clientTable) {
+      const client = this._clientTable[id].client;
+      const values = objectValues(client);
+
+      table.push(values);
+    }
+
+    return `<pre>${markdownTable(table)}</pre>`;
   }
 }

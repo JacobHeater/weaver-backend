@@ -1,11 +1,16 @@
 language: node_js
 node_js: 
-  - "stable"
+  - stable
 cache:
   directories:
-    - "node_modules"
+    - node_modules
 before_script:
-  - "npm install"
+  - cd ..
+  - git clone https://github.com/JacobHeater/weaver-common.git
+  - cd weaver-common
+  - npm install
+  - cd ../weaver-backend
+  - npm install
 script:
-  - "npm run build"
-  - "npm test"
+  - npm run build
+  - npm test
