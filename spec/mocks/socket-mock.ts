@@ -1,6 +1,6 @@
 import { Socket } from 'socket.io';
 
-export class TestSocket implements Socket {
+export class SocketMock implements Socket {
   nsp: import("socket.io").Namespace;
   server: import("socket.io").Server;
   adapter: import("socket.io").Adapter;

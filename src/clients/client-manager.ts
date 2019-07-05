@@ -2,12 +2,24 @@ import { ClientSocketPair } from "./client-socket-pair";
 import { Client } from "../../../weaver-common/src/common/client";
 import { objectValues } from '../../../weaver-common/src/helpers/object-helpers';
 import markdownTable from 'markdown-table';
+import { Socket } from 'socket.io';
 
 export class ClientManager {
   private constructor() { }
 
-  public static readonly Instance = new ClientManager();
-  private readonly _clientTable: { [key: string]: ClientSocketPair } = {};
+  private static readonly _instance = new ClientManager();
+  public static get Instance(): ClientManager {
+    return this._instance;
+  }
+
+  private _clientTable: { [key: string]: ClientSocketPair } = {};
+
+  /**
+   * Returns the number of connected clients.
+   */
+  public get count(): number {
+    return this.clientsToArray().length;
+  }
 
   /**
    * Adds a client socket pair to the mapping table.
@@ -51,21 +63,68 @@ export class ClientManager {
   }
 
   /**
+   * Returns the matching client socket pair based
+   * on the socket.
+   * 
+   * @param socket The socket to filter on.
+   */
+  public getClientBySocket(socket: Socket): ClientSocketPair | undefined {
+    const pairs = this.clientSocketPairsToArray();
+    const match = pairs.find(p => p.socket === socket);
+
+    return match;
+  }
+
+  /**
    * Returns the client table to a JSON string.
    */
   public clientsToTable(): string {
-    const table: any[] = [];
+    let table: any[] = [];
     const cols = Object.keys(new Client());
 
     table.push(cols);
 
-    for (let id in this._clientTable) {
-      const client = this._clientTable[id].client;
-      const values = objectValues(client);
+    const clients = this.clientsToArray();
+    const clientValues = clients.map(c => objectValues(c));
 
-      table.push(values);
-    }
+    table = table.concat(clientValues);
 
     return `<pre>${markdownTable(table)}</pre>`;
+  }
+
+  /**
+   * Returns the clients as a JSON array.
+   */
+  public clientsToJson(): string {
+    return JSON.stringify(this.clientsToArray());
+  }
+
+  /**
+   * Returns the clients as an array.
+   */
+  public clientsToArray(): Client[] {
+    return this.clientSocketPairsToArray().map(c => c.client);
+  }
+
+  /**
+   * Returns the mappings to an array.
+   */
+  public clientSocketPairsToArray(): ClientSocketPair[] {
+    const pairs: ClientSocketPair[] = [];
+
+    for (let id in this._clientTable) {
+      const pair = this._clientTable[id];
+
+      pairs.push(pair);
+    }
+
+    return pairs;
+  }
+
+  /**
+   * Clears the client mapping table.
+   */
+  public clear(): void {
+    this._clientTable = {};
   }
 }
