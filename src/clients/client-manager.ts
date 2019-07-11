@@ -8,7 +8,7 @@ export class ClientManager {
   private constructor() { }
 
   private static readonly _instance = new ClientManager();
-  public static get Instance(): ClientManager {
+  static get Instance(): ClientManager {
     return this._instance;
   }
 
@@ -17,7 +17,7 @@ export class ClientManager {
   /**
    * Returns the number of connected clients.
    */
-  public get count(): number {
+  get count(): number {
     return this.clientsToArray().length;
   }
 
@@ -26,7 +26,7 @@ export class ClientManager {
    * 
    * @param pair The pair to add to the table.
    */
-  public addClient(pair: ClientSocketPair): void {
+  addClient(pair: ClientSocketPair): void {
     if (!pair || !pair.isValid()) {
       return;
     }
@@ -40,7 +40,7 @@ export class ClientManager {
    * 
    * @param client The client to remove from the table.
    */
-  public removeClient(client: Client): void {
+  removeClient(client: Client): void {
     if (!client || !client.isValid()) {
       return;
     }
@@ -54,7 +54,7 @@ export class ClientManager {
    * 
    * @param clientId The id of the client to look up.
    */
-  public getClient(clientId: string): ClientSocketPair | undefined {
+  getClient(clientId: string): ClientSocketPair | undefined {
     if (!(clientId || '').trim()) {
       return void 0;
     }
@@ -68,7 +68,7 @@ export class ClientManager {
    * 
    * @param socket The socket to filter on.
    */
-  public getClientBySocket(socket: Socket): ClientSocketPair | undefined {
+  getClientBySocket(socket: Socket): ClientSocketPair | undefined {
     const pairs = this.clientSocketPairsToArray();
     const match = pairs.find(p => p.socket === socket);
 
@@ -78,7 +78,7 @@ export class ClientManager {
   /**
    * Returns the client table to a JSON string.
    */
-  public clientsToTable(): string {
+  clientsToTable(): string {
     let table: any[] = [];
     const cols = Object.keys(new Client());
 
@@ -95,21 +95,21 @@ export class ClientManager {
   /**
    * Returns the clients as a JSON array.
    */
-  public clientsToJson(): string {
+  clientsToJson(): string {
     return JSON.stringify(this.clientsToArray());
   }
 
   /**
    * Returns the clients as an array.
    */
-  public clientsToArray(): Client[] {
+  clientsToArray(): Client[] {
     return this.clientSocketPairsToArray().map(c => c.client);
   }
 
   /**
    * Returns the mappings to an array.
    */
-  public clientSocketPairsToArray(): ClientSocketPair[] {
+  clientSocketPairsToArray(): ClientSocketPair[] {
     const pairs: ClientSocketPair[] = [];
 
     for (let id in this._clientTable) {
@@ -124,7 +124,7 @@ export class ClientManager {
   /**
    * Clears the client mapping table.
    */
-  public clear(): void {
+  clear(): void {
     this._clientTable = {};
   }
 }

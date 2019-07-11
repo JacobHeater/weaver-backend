@@ -8,7 +8,8 @@ import {
   DISCONNECT, CLIENT_DISCONNECTED
 } from '../../weaver-common/src/common/events';
 import { ClientManager } from './clients/client-manager';
-import { wantClients } from './operations/want-clients/want-clients';
+import { getClients } from './operations/get-clients/get-clients';
+import { getClientById } from './operations/get-clients/get-client-by-id';
 
 const app = express();
 const server = http.createServer(app);
@@ -17,7 +18,8 @@ const io = socketio(server);
 
 io.on('connection', socket => {
   register(socket, io);
-  wantClients(socket);
+  getClients(socket);
+  getClientById(socket);
 
   socket.on(DISCONNECT, () => {
     const matchClient = ClientManager.Instance.getClientBySocket(socket);
